@@ -15,19 +15,12 @@ import java.util.Random;
  * @author raymondxia
  */
 public class Pong extends JPanel implements ActionListener, KeyListener {
-    JFrame frame;
-    JPanel panel;
-    
     Timer updater;
     Ball ball;
     Paddle pad;
     Random r;
     
     public Pong() {
-        frame = new JFrame("BouncingScreenSaver");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        panel = new JPanel();
         
         ball = new Ball(0,0, true, true);
         pad = new Paddle();
@@ -36,12 +29,6 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
         
         updater = new Timer(15, this);
         updater.start();
-        
-        
-        
-        frame.setSize(360, 300);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
     
     @Override
@@ -119,7 +106,12 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
     
     private static void runGUI() {
         Pong pong = new Pong();
-        
+        JFrame frame = new JFrame("BouncingScreenSaver");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(pong);
+        frame.setSize(360, 300);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
     
     public static void main(String[] args) {
