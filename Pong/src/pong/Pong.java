@@ -29,6 +29,10 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
         
         updater = new Timer(15, this);
         updater.start();
+        
+        this.addKeyListener(this);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
     
     @Override
@@ -43,62 +47,76 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
         
         g2d.setColor(Color.black);
         g2d.fillRect(pad.getX(), pad.getY(), pad.getWidth(), pad.getHeight());
+        System.out.println(pad.getX());
         
     }
   
     @Override
     public void actionPerformed(ActionEvent e) {    
-        checkAndMove(ball);
+        checkAndMove();
         repaint();
     }
     
-    public void checkAndMove(Ball r) {
-        int x = r.getX();
-        int y = r.getY();
-        boolean right = r.getRight();
-        boolean down = r.getDown();
+    public void checkAndMove() {
+        int x = ball.getX();
+        int y = ball.getY();
         
-        if (right) {
-            if (x+r.getWidth() >= super.getWidth() /*|| (y>r2.getY() && y<r2.getY()+50 || y+50>r2.getY() && y+50<r2.getY()+50) && x+50 >= r2.getX()*/) {
-                r.setRight(false);
+        if (ball.getRight()) {
+            if (x+ball.getWidth() >= super.getWidth() /*|| (y>r2.getY() && y<r2.getY()+50 || y+50>r2.getY() && y+50<r2.getY()+50) && x+50 >= r2.getX()*/) {
+                ball.setRight(false);
             } else {
-                r.setX(x+2);
+                ball.setX(x+2);
             }   
         } else {
             if (x <= 0 /*|| (y>r2.getY() && y<r2.getY()+50 || y+50>r2.getY() && y+50<r2.getY()+50) && x+50 <= r2.getX()*/) {
-                r.setRight(true);
+                ball.setRight(true);
             } else {
-                r.setX(x-2);
+                ball.setX(x-2);
             }
         }
         
-        if (y+25 >= super.getHeight()) {
-            r.setDown(false);
+        if (y+25 >= 260 && x+12>=pad.getX() && x+12<=pad.getX()+pad.getWidth()) {
+            ball.setDown(false);
         } else if (y <= 0) {
-            r.setDown(true);
+            ball.setDown(true);
         } 
-        if (down) {
-            r.setY(y+2);
+        if (ball.getDown()) {
+            ball.setY(y+2);
         } else {
-            r.setY(y-2);
+            ball.setY(y-2);
+        }
+        
+        /* Paddle Movement */
+        if (pad.getLeft() && pad.getX()>0) {
+            pad.setX(pad.getX()-3);
+        } 
+        if (pad.getRight() && pad.getX()<300) {
+            pad.setX(pad.getX()+3);
         }
     }
     
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        System.out.println("jeffery");
+        
         if (key == KeyEvent.VK_LEFT) {
-            pad.setX(pad.getX()-1);
+            pad.setLeft(true);
         } else if (key == KeyEvent.VK_RIGHT) {
-            pad.setX(pad.getX()+1);
+            pad.setRight(true);
         }
     }
     
     @Override
     public void keyReleased(KeyEvent e) {
-        //auto-generated method
+        int key = e.getKeyCode();
+        
+        if (key == KeyEvent.VK_LEFT) {
+            pad.setLeft(false);
+        } else if (key == KeyEvent.VK_RIGHT) {
+            pad.setRight(false);
+        }
     }    
+    
     @Override
     public void keyTyped(KeyEvent e) {
         //auto-generated method
@@ -106,7 +124,7 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
     
     private static void runGUI() {
         Pong pong = new Pong();
-        JFrame frame = new JFrame("BouncingScreenSaver");
+        JFrame frame = new JFrame("Pong");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(pong);
         frame.setSize(360, 300);
