@@ -10,13 +10,13 @@ package pong;
  * @author raymondxia
  */
 public class Paddle {
-    private final int HEIGHT, WIDTH;
+    private final int WIDTH, LENGTH;
     private int x, y;
     private boolean left, right;
     
     public Paddle() {
-        HEIGHT = 30;
-        WIDTH = 60;
+        WIDTH = 30;
+        LENGTH = 60;
         x = 120;
         y = 260;
         left = false;
@@ -31,12 +31,12 @@ public class Paddle {
         return y;
     }
     
-    public int getHeight() {
-        return HEIGHT;
-    }
-    
     public int getWidth() {
         return WIDTH;
+    }
+    
+    public int getLength() {
+        return LENGTH;
     }
     
     public boolean getLeft() {

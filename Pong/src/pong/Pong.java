@@ -43,11 +43,10 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
         Graphics2D g2d = (Graphics2D)g;
 
         g2d.setColor(Color.ORANGE);
-        g2d.fillOval(ball.getX(), ball.getY(), ball.getLength(), ball.getWidth());
+        g2d.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
         
         g2d.setColor(Color.black);
-        g2d.fillRect(pad.getX(), pad.getY(), pad.getWidth(), pad.getHeight());
-        System.out.println(pad.getX());
+        g2d.fillRect(pad.getX(), pad.getY(), pad.getLength(), pad.getWidth());
         
     }
   
@@ -60,22 +59,30 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
     public void checkAndMove() {
         int x = ball.getX();
         int y = ball.getY();
+        int r = ball.getRadius();
         
+        /* Ball X-Movement */
         if (ball.getRight()) {
-            if (x+ball.getWidth() >= super.getWidth() /*|| (y>r2.getY() && y<r2.getY()+50 || y+50>r2.getY() && y+50<r2.getY()+50) && x+50 >= r2.getX()*/) {
+            if (x+r*2 >= super.getWidth()) {
+                ball.setRight(false);
+            } else if (x+r*2 >= pad.getX() && x+r*2 <= pad.getX()+pad.getLength() && y+r >= pad.getY() && y+r <= pad.getY()+pad.getWidth()) {
                 ball.setRight(false);
             } else {
                 ball.setX(x+2);
             }   
         } else {
-            if (x <= 0 /*|| (y>r2.getY() && y<r2.getY()+50 || y+50>r2.getY() && y+50<r2.getY()+50) && x+50 <= r2.getX()*/) {
+            if (x <= 0) {
+                ball.setRight(true);
+            } else if (x <= pad.getX()+pad.getLength() && x >= pad.getX() && y+r >= pad.getY() && y+r <= pad.getY()+pad.getWidth()) {
                 ball.setRight(true);
             } else {
                 ball.setX(x-2);
             }
         }
         
-        if (y+25 >= 260 && x+12>=pad.getX() && x+12<=pad.getX()+pad.getWidth()) {
+        /* Ball Y-Movement */
+        System.out.println(y+r);
+        if (y+r*2 >= super.getHeight() || x+r>=pad.getX() && x+r<= pad.getX()+pad.getLength() && y+r*2>=pad.getY()) {
             ball.setDown(false);
         } else if (y <= 0) {
             ball.setDown(true);
@@ -88,10 +95,10 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
         
         /* Paddle Movement */
         if (pad.getLeft() && pad.getX()>0) {
-            pad.setX(pad.getX()-3);
+            pad.setX(pad.getX()-2);
         } 
         if (pad.getRight() && pad.getX()<300) {
-            pad.setX(pad.getX()+3);
+            pad.setX(pad.getX()+2);
         }
     }
     

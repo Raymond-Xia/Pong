@@ -10,8 +10,7 @@ package pong;
  * @author raymondxia
  */
 public class Ball {
-    private static final int l = 25;
-    private static final int w = 25;
+    private static final int radius = 10;
     private int x, y;
     private boolean right;
     private boolean down;
@@ -31,12 +30,8 @@ public class Ball {
         return y;
     }
     
-    public int getLength() {
-        return l;
-    }
-    
-    public int getWidth() {
-        return w;
+    public int getRadius() {
+        return radius;
     }
     
     public boolean getRight() {
