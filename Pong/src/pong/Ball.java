@@ -11,22 +11,26 @@ package pong;
  */
 public class Ball {
     private static final int radius = 10;
-    private int x, y;
+    private int speed;
+    private double x, y;
     private boolean right;
     private boolean down;
+    private double direction;
     
     public Ball(int xCoord, int yCoord, boolean r, boolean d) {
         x = xCoord;
         y = yCoord;
         right = r;
         down = d;
+        speed = 2;
+        direction = 7*Math.PI/4;
     }
     
-    public int getX() {
+    public double getX() {
         return x;
     }
     
-    public int getY() {
+    public double getY() {
         return y;
     }
     
@@ -42,11 +46,19 @@ public class Ball {
         return down;
     }
     
-    public void setX(int xNew) {
+    public int getSpeed() {
+        return speed;
+    }
+    
+    public double getDirection() {
+        return direction;
+    }
+    
+    public void setX(double xNew) {
         x = xNew;
     }
     
-    public void setY(int yNew) {
+    public void setY(double yNew) {
         y = yNew;
     }
     
@@ -56,6 +68,14 @@ public class Ball {
     
     public void setDown(boolean d) {
         down = d;
+    }
+    
+    public void setSpeed(int s) {
+        speed = s;
+    }
+    
+    public void setDirection(double d) {
+        direction = d;
     }
     
 }

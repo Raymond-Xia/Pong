@@ -18,14 +18,14 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
     Timer updater;
     Ball ball;
     Paddle pad;
-    Random r;
+    Random rand;
     
     public Pong() {
         
-        ball = new Ball(0,0, true, true);
+        ball = new Ball(1, 1, true, true);
         pad = new Paddle();
                 
-        r = new Random();
+        rand = new Random();
         
         updater = new Timer(15, this);
         updater.start();
@@ -37,17 +37,15 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
     
     @Override
     public void paintComponent(Graphics g) {
-        
         super.paintComponent(g);
         super.setBackground(Color.darkGray);
         Graphics2D g2d = (Graphics2D)g;
 
         g2d.setColor(Color.ORANGE);
-        g2d.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
+        g2d.fillRect((int)ball.getX(), (int)ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
         
         g2d.setColor(Color.black);
         g2d.fillRect(pad.getX(), pad.getY(), pad.getLength(), pad.getWidth());
-        
     }
   
     @Override
@@ -57,41 +55,22 @@ public class Pong extends JPanel implements ActionListener, KeyListener {
     }
     
     public void checkAndMove() {
-        int x = ball.getX();
-        int y = ball.getY();
+        double x = ball.getX();
+        double y = ball.getY();
         int r = ball.getRadius();
         
         /* Ball X-Movement */
-        if (ball.getRight()) {
-            if (x+r*2 >= super.getWidth()) {
-                ball.setRight(false);
-            } else if (x+r*2 >= pad.getX() && x+r*2 <= pad.getX()+pad.getLength() && y+r >= pad.getY() && y+r <= pad.getY()+pad.getWidth()) {
-                ball.setRight(false);
-            } else {
-                ball.setX(x+2);
-            }   
-        } else {
-            if (x <= 0) {
-                ball.setRight(true);
-            } else if (x <= pad.getX()+pad.getLength() && x >= pad.getX() && y+r >= pad.getY() && y+r <= pad.getY()+pad.getWidth()) {
-                ball.setRight(true);
-            } else {
-                ball.setX(x-2);
-            }
+        if (x+r*2 >= super.getWidth() || x <= 0 || x+r*2>=pad.getX() && x+r*2<=pad.getX()+pad.getLength() && y+r>=pad.getY() && y+r <= pad.getY()+pad.getWidth()) {
+            ball.setDirection((Math.PI-ball.getDirection())%(2*Math.PI));  
+            ball.setX(x+ball.getSpeed()*Math.cos(ball.getDirection()));
         }
+        ball.setX(x+ball.getSpeed()*Math.cos(ball.getDirection()));
         
         /* Ball Y-Movement */
-        System.out.println(y+r);
-        if (y+r*2 >= super.getHeight() || x+r>=pad.getX() && x+r<= pad.getX()+pad.getLength() && y+r*2>=pad.getY()) {
-            ball.setDown(false);
-        } else if (y <= 0) {
-            ball.setDown(true);
-        } 
-        if (ball.getDown()) {
-            ball.setY(y+2);
-        } else {
-            ball.setY(y-2);
+        if (y+r*2 >= super.getHeight() || y <= 0 || x+r>=pad.getX() && x+r<=pad.getX()+pad.getLength() && y+r*2>=pad.getY()) {
+            ball.setDirection((2*Math.PI-ball.getDirection())%(2*Math.PI));
         }
+        ball.setY(y-ball.getSpeed()*Math.sin(ball.getDirection()));
         
         /* Paddle Movement */
         if (pad.getLeft() && pad.getX()>0) {
